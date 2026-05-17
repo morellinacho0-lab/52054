@@ -1,0 +1,169 @@
+Nombre: Ignacio Morelli
+Legajo: 52054
+
+
+grammar Tablero;
+
+// ============================================================
+// REGLAS SINTÁCTICAS (Parser Rules)
+// ============================================================
+
+programa
+    : 'tablero' identificador '{' elemento* '}' ';'
+    ;
+
+elemento
+    : fuente
+    | metrica
+    | grafico
+    | filtro
+    | alerta
+    ;
+
+fuente
+    : 'fuente' identificador 'tipo' tipo_fuente 'ruta' cadena ';'
+    ;
+
+tipo_fuente
+    : 'csv'
+    | 'api'
+    | 'json'
+    ;
+
+metrica
+    : 'metrica' identificador '=' agregacion '(' campo ')' ';'
+    ;
+
+agregacion
+    : 'suma'
+    | 'promedio'
+    | 'maximo'
+    | 'minimo'
+    | 'contar'
+    ;
+
+grafico
+    : 'grafico' identificador '{' 'tipo' '=' tipo_grafico ';' 'usar' '=' identificador ';' '}'
+    ;
+
+tipo_grafico
+    : 'barras'
+    | 'lineas'
+    | 'torta'
+    | 'tabla'
+    ;
+
+filtro
+    : 'filtro' campo operador valor ';'
+    ;
+
+operador
+    : '=='
+    | '!='
+    | '>'
+    | '<'
+    | '>='
+    | '<='
+    ;
+
+alerta
+    : 'alerta' 'si' identificador operador valor 'entonces' cadena ';'
+    ;
+
+campo
+    : identificador ('.' identificador)*
+    ;
+
+valor
+    : cadena
+    | numero
+    | booleano
+    ;
+
+booleano
+    : 'verdadero'
+    | 'falso'
+    ;
+
+identificador
+    : ID
+    ;
+
+cadena
+    : STRING
+    ;
+
+numero
+    : NUMBER
+    ;
+
+// ============================================================
+// REGLAS LÉXICAS (Lexer Rules)
+// ============================================================
+
+// Palabras reservadas
+TABLERO    : 'tablero' ;
+FUENTE     : 'fuente' ;
+TIPO       : 'tipo' ;
+RUTA       : 'ruta' ;
+METRICA    : 'metrica' ;
+GRAFICO    : 'grafico' ;
+USAR       : 'usar' ;
+FILTRO     : 'filtro' ;
+ALERTA     : 'alerta' ;
+SI         : 'si' ;
+ENTONCES   : 'entonces' ;
+
+// Tipos de fuente
+CSV        : 'csv' ;
+API        : 'api' ;
+JSON_T     : 'json' ;
+
+// Agregaciones
+SUMA       : 'suma' ;
+PROMEDIO   : 'promedio' ;
+MAXIMO     : 'maximo' ;
+MINIMO     : 'minimo' ;
+CONTAR     : 'contar' ;
+
+// Tipos de grafico
+BARRAS     : 'barras' ;
+LINEAS     : 'lineas' ;
+TORTA      : 'torta' ;
+TABLA      : 'tabla' ;
+
+// Booleanos
+VERDADERO  : 'verdadero' ;
+FALSO      : 'falso' ;
+
+// Operadores
+EQ         : '==' ;
+NEQ        : '!=' ;
+GTE        : '>=' ;
+LTE        : '<=' ;
+GT         : '>' ;
+LT         : '<' ;
+ASSIGN     : '=' ;
+
+// Simbolos
+LBRACE     : '{' ;
+RBRACE     : '}' ;
+LPAREN     : '(' ;
+RPAREN     : ')' ;
+SEMICOLON  : ';' ;
+DOT        : '.' ;
+
+// Identificador: letra seguida de letras, digitos o guion bajo
+ID         : [a-zA-Z] [a-zA-Z0-9_]* ;
+
+// Numero: entero o decimal
+NUMBER     : [0-9]+ ('.' [0-9]+)? ;
+
+// Cadena: texto entre comillas dobles
+STRING     : '"' ( ~["\r\n] )* '"' ;
+
+// Ignorar espacios en blanco y saltos de linea
+WS         : [ \t\r\n]+ -> skip ;
+
+// Ignorar comentarios de linea
+COMMENT    : '//' ~[\r\n]* -> skip ;
