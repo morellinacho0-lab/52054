@@ -1,0 +1,16 @@
+tablero monitoreo_sistema {
+    fuente logs tipo json ruta "logs/sistema.json";
+
+    metrica errores_totales = contar(logs.nivel_error);
+    metrica tiempo_max = maximo(logs.duracion);
+    metrica tiempo_min = minimo(logs.duracion);
+
+    grafico vista_errores {
+        tipo = lineas;
+        usar = errores_totales;
+    }
+
+    filtro logs.nivel_error != "info";
+
+    alerta si errores_totales >= 100 entonces "Sistema con alto nivel de errores";
+};

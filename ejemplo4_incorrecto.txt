@@ -1,0 +1,12 @@
+tablero reporte_mal {
+    fuente datos tipo xml ruta "datos.xml";
+
+    metrica resultado = multiplicar(datos.valor);
+
+    grafico g1 {
+        tipo = radar;
+        usar = resultado;
+    }
+
+    filtro datos.precio ?? 500;
+};

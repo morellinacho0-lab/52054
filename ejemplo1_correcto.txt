@@ -1,0 +1,24 @@
+tablero ventas_mensuales {
+    fuente datos_ventas tipo csv ruta "datos/ventas.csv";
+    fuente api_clientes tipo api ruta "https://api.empresa.com/clientes";
+
+    metrica total_ventas = suma(datos_ventas.monto);
+    metrica cantidad_clientes = contar(api_clientes.id);
+    metrica venta_promedio = promedio(datos_ventas.monto);
+
+    grafico grafico_barras {
+        tipo = barras;
+        usar = total_ventas;
+    }
+
+    grafico grafico_clientes {
+        tipo = torta;
+        usar = cantidad_clientes;
+    }
+
+    filtro datos_ventas.region == "sur";
+    filtro datos_ventas.monto > 1000;
+
+    alerta si total_ventas < 5000 entonces "Ventas por debajo del objetivo mensual";
+    alerta si cantidad_clientes > 500 entonces "Alta demanda de clientes detectada";
+};

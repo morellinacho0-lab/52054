@@ -1,0 +1,12 @@
+tablero reporte_error {
+    fuente datos tipo csv ruta "archivo.csv";
+
+    metrica total = suma(datos.valor)
+
+    grafico mi_grafico {
+        tipo = barras;
+        usar = total;
+    }
+
+    alerta si total > 1000 entonces "Valor alto";
+};
