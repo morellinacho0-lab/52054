@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/27939104/README.md)
 #### **READ ME**
 
 * ###### **DESCRIPCIÓN DEL PROYECTO:**
